@@ -1,0 +1,42 @@
+
+@startuml
+left to right direction
+actor "Elevator System UI" as ECV
+rectangle "Elevator Controller" {
+  ECV -- (Get number of people in elevator)
+  ECV -- (Get direction of elevator)
+  ECV -- (Get count of people waiting on a floor)
+  ECV -- (Get destination level people wish to go)
+  ECV -- (Request Elevator)
+}
+@enduml
+
+
+@startuml
+left to right direction
+actor "Elevator Controller" as EC
+rectangle Elevator {
+  EC - (Get elevator location) : tracks location of elevator using
+  EC - (Get elevator direction) : tracks direction of elevator if moving
+  EC - (Get remaining capacity) : track remaining person capacity in elevator
+  EC  - (Insert order) : add orders to elevator using
+}
+
+rectangle ElevatorSystemClient {
+  EC - (Get client installation level) : to identify which level request is coming from
+  EC - (Get count of people waiting) : number of people waiting to use elevator
+  EC - (Get destination level) : to identify which level people want to go to
+
+}
+@enduml
+
+
+@startuml
+left to right direction
+
+actor "Elevator Controller Client" as ECC
+rectangle "Elevator Controller" {
+  ECC -- (Register Request) : sends request to central controller
+}
+
+@enduml

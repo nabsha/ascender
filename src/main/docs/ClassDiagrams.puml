@@ -1,0 +1,64 @@
+@startuml
+
+package ElevatorSystemClient {
+  class ElevatorSystemClient{
+    - clientId
+    - levelNumber
+    - countOfPeopleWaiting
+    - destinationLevel[1..10]
+    + createOrder()
+  }
+}
+package "Elevator" {
+  class ElevatorModel {
+    - elevatorId
+    - direction
+    - currentLevel
+    - remainingCapacity[0..20]
+    - SortedSet<Order> remainingOrderQueue
+  }
+
+  ElevatorState --* Elevator
+  class Elevator {
+    - elevatorModel
+    - BlockingQueue<Order> incomingOrdersQueue
+    + insertOrder(destinationLevel)
+    + statusUpdate()
+    +
+  }
+  
+  enum direction {
+    UPWARDS (^)
+    DOWNWARDS (\/)
+    STATIONARY (-)
+  }
+
+}
+package ElevatorController {
+  class ElevatorController {
+    List<Elevator> elevatorList
+    List<ElevatorClientController> clientList
+    BlockingQueue<ElevatorEvent> elevatorEventList
+    - processOrder(sourceLevel, destinationLevel, peopleWaiting, elevatorList)
+    - Direction calculateDirection(sourceLevel, destinationLevel)
+    + registerOrder(sourceLevel, destinationLevel, peopleWaiting)
+    + addElevatorEvent()
+  }
+}
+class ElevatorEvent {
+  - elevatorModel
+}
+ElevatorState --* ElevatorEvent
+
+ElevatorController "1" - "4" Elevator
+ElevatorController "1" - "10" ElevatorSystemClient
+ElevatorController . ElevatorEvent
+
+Elevator "1" - "1" direction
+
+interface Runnable
+Runnable -|> Elevator
+Runnable -|> ElevatorController
+
+
+@enduml

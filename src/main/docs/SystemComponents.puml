@@ -1,0 +1,42 @@
+@startuml
+
+package "Elevator System" {
+[Elevator System Client] as ECC
+[Elevator Controller] as EC
+[Elevator] as E
+
+ECC "10" *-- "1" EC : requests
+EC "1" --* "4" E : controls
+}
+requestElevator -- ECC
+
+[Elevator Controller View] as ECV
+EC -left- ECV
+
+[Elevator Controller Model] as ECM
+EC -right- ECM
+
+
+note bottom of E
+ - Can carry 20 passengers from
+ one floor to another at a given time
+ - An elevator controller can insert
+ orders in Elevators order list.
+end note
+
+note top of EC
+  - Brain of the system
+  - Captures orders from clients
+  and delegates to suitable elevator
+end note
+
+note top of ECC
+  - Simulates the switchboard
+  installed on each floor
+  - Also keeps the count of people
+  waiting on the floor to use elevator
+  - for instance, each person presses
+  the button on switchboard, but that
+  individual registration is out of scope
+end note
+@enduml
