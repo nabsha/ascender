@@ -71,6 +71,20 @@ Same rule applies for the elevator going downwards
 * Elevator-Controller keeps records of Elevator location and direction at all times. A stationary Elevator will not have any direction.
 
 
+# Documentation
 
+## Use case diagram
+
+![Usecase diagram](src/main/docs/generated/UseCaseDiagrams.png))
+![Usecase diagram](src/main/docs/generated/UseCaseDiagrams-001.png))
+![Usecase diagram](src/main/docs/generated/UseCaseDiagrams-002.png))
+
+## Component Diagram
+
+![Component diaggram](src/main/docs/generated/ComponentDiagram.png)
+
+## Class Diagram
+
+![Class diaggram](src/main/docs/generated/ClassDiagrams.png)
 
 
