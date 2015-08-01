@@ -75,9 +75,9 @@ Same rule applies for the elevator going downwards
 
 ## Use case diagram
 
-![Usecase diagram](src/main/docs/generated/UseCaseDiagrams.png))
-![Usecase diagram](src/main/docs/generated/UseCaseDiagrams-001.png))
-![Usecase diagram](src/main/docs/generated/UseCaseDiagrams-002.png))
+![Usecase diagram](src/main/docs/generated/UseCaseDiagrams.png)
+![Usecase diagram](src/main/docs/generated/UseCaseDiagrams-001.png)
+![Usecase diagram](src/main/docs/generated/UseCaseDiagrams-002.png)
 
 ## Component Diagram
 
