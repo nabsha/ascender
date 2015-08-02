@@ -24,7 +24,8 @@ public class ElevatorControllerTest {
         elevators.add(e2);
         elevators.add(e3);
         elevators.add(e4);
-        ElevatorController controller = new ElevatorController(elevators);
+        ElevatorController controller = ElevatorController.getInstance();
+        controller.setElevatorList(elevators);
         assertEquals("E2", controller.selectElevator(5).getElevatorId());
         assertEquals("E3", controller.selectElevator(3).getElevatorId());
         assertEquals("E1", controller.selectElevator(7).getElevatorId());

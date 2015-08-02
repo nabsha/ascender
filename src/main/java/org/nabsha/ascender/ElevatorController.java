@@ -8,20 +8,36 @@ import java.util.Map;
 /**
  * Created by Nabeel Shaheen on 2/08/2015.
  */
-public class ElevatorController implements Runnable {
+public class ElevatorController {
 
+    private static ElevatorController elevatorController = null;
     private List<Elevator> elevatorList;
     private List<ElevatorControllerInterface> elevatorControllerInterfaceList;
-
     private List<Thread> elevatorThreads = new ArrayList<Thread>();
 
-    public ElevatorController(List<Elevator> elevatorList) {
+    private ElevatorController() {}
+
+    public static ElevatorController getInstance() {
+        if (elevatorController == null)
+            elevatorController = new ElevatorController();
+
+        return elevatorController;
+    }
+
+    public List<Elevator> getElevatorList() {
+        return elevatorList;
+    }
+
+    public void setElevatorList(List<Elevator> elevatorList) {
         this.elevatorList = elevatorList;
     }
 
-    public void run() {
-        startElevators();
+    public List<ElevatorControllerInterface> getElevatorControllerInterfaceList() {
+        return elevatorControllerInterfaceList;
+    }
 
+    public void setElevatorControllerInterfaceList(List<ElevatorControllerInterface> elevatorControllerInterfaceList) {
+        this.elevatorControllerInterfaceList = elevatorControllerInterfaceList;
     }
 
     private void startElevators() {
@@ -40,7 +56,7 @@ public class ElevatorController implements Runnable {
         Map<String, Integer> elevatorSelectionScore = new HashMap<String, Integer>();
         int minScor = 100;
         Elevator selectedElevator = null;
-        for (Elevator elevator:elevatorList) {
+        for (Elevator elevator : elevatorList) {
             int elevationScore;
             if (elevator.getDirection().equals(Direction.DOWNWARDS)) {
                 elevationScore = elevator.getCurrentLevel() - requestFloor;
