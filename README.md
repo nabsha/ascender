@@ -53,7 +53,10 @@ Same rule applies for the elevator going downwards
 
 * Destination floor can not be changed by people inside the elevator, it is only selected at the time of boarding the elevator.
 
-* Elevator will stop on floors in order of their occurrence.
+* Elevator will stop on all floors for which it has received orders, in order of their occurrence(i.e. upwards/downwards) for 5 sec only. 
+Elevator will not stop on floor/level without any order for it.
+
+* Elevator will take 1 sec to move between 1 floor to next floor in any direction
 
 
 # Design notes
@@ -70,6 +73,9 @@ Same rule applies for the elevator going downwards
 
 * Elevator-Controller keeps records of Elevator location and direction at all times. A stationary Elevator will not have any direction.
 
+* Elevator will keep track of people and their destination level. So lets say 10 people board the elevator from ground floor 
+going to floor 10, then on its way up, 5 more people boarded the elevator from floor 2 for floor 9, then elevator must 
+stop at floor 9, remove 5 people from itself, then go to floor 10 and remove 10 people.
 
 # Documentation
 

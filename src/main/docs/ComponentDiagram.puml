@@ -1,7 +1,7 @@
 @startuml
 
 package "Elevator System" {
-[Elevator System Client] as ECC
+[Elevator Controller Interface] as ECC
 [Elevator Controller] as EC
 [Elevator] as E
 

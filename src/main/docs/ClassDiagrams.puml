@@ -1,26 +1,37 @@
 @startuml
 
-package ElevatorSystemClient {
-  class ElevatorSystemClient{
+package ElevatorControllerInterface {
+  class ElevatorControllerInterface{
     - clientId
     - levelNumber
-    - countOfPeopleWaiting
     - destinationLevel[1..10]
     + createOrder()
   }
 }
+
+ElevatorControllerInterface .> Floor
+
+Elevator "1" . "10" Floor
+
+class Floor {
+    - listOfPeopleWaiting
+    - countOfPeopleDelivered
+    - floorNumber
+}
+
+class Person {
+  - sourceLevel
+  - destinationLevel
+}
+
 package "Elevator" {
-  class ElevatorModel {
+
+  class Elevator {
     - elevatorId
     - direction
     - currentLevel
-    - remainingCapacity[0..20]
+    - list of person[0..20]
     - SortedSet<Order> remainingOrderQueue
-  }
-
-  ElevatorState --* Elevator
-  class Elevator {
-    - elevatorModel
     - BlockingQueue<Order> incomingOrdersQueue
     + insertOrder(destinationLevel)
     + statusUpdate()
@@ -34,27 +45,36 @@ package "Elevator" {
   }
 
 }
+
 package ElevatorController {
   class ElevatorController {
     List<Elevator> elevatorList
-    List<ElevatorClientController> clientList
-    BlockingQueue<ElevatorEvent> elevatorEventList
+    List<ElevatorClientInterface> clientList
     - processOrder(sourceLevel, destinationLevel, peopleWaiting, elevatorList)
-    - Direction calculateDirection(sourceLevel, destinationLevel)
     + registerOrder(sourceLevel, destinationLevel, peopleWaiting)
-    + addElevatorEvent()
   }
 }
-class ElevatorEvent {
-  - elevatorModel
+
+class ElevatorRecorder {
+
 }
-ElevatorState --* ElevatorEvent
+
+ElevatorRecorder "1" -* "4" Elevator
+
+class Order {
+  sourceLevel
+  destinationLevel
+}
+Elevator . Order
+ElevatorController . Order
+
 
 ElevatorController "1" - "4" Elevator
-ElevatorController "1" - "10" ElevatorSystemClient
-ElevatorController . ElevatorEvent
+ElevatorController "1" - "10" ElevatorControllerInterface
 
 Elevator "1" - "1" direction
+Elevator "1" o- "20" Person
+Floor "1" o- "*" Person
 
 interface Runnable
 Runnable -|> Elevator

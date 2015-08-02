@@ -22,7 +22,7 @@ rectangle Elevator {
   EC  - (Insert order) : add orders to elevator using
 }
 
-rectangle ElevatorSystemClient {
+rectangle ElevatorFloorInterface {
   EC - (Get client installation level) : to identify which level request is coming from
   EC - (Get count of people waiting) : number of people waiting to use elevator
   EC - (Get destination level) : to identify which level people want to go to
@@ -34,9 +34,9 @@ rectangle ElevatorSystemClient {
 @startuml
 left to right direction
 
-actor "Elevator Controller Client" as ECC
-rectangle "Elevator Controller" {
-  ECC -- (Register Request) : sends request to central controller
+actor "Person" as ECC
+rectangle "ElevatorFloorInterface" {
+  ECC -- (Register Request) : presses button
 }
 
 @enduml
