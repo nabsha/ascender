@@ -7,14 +7,11 @@ public class ElevatorControllerInterface {
 
     private final int floor;
 
-    private ElevatorController elevatorController;
-
-    public ElevatorControllerInterface(int floor, ElevatorController elevatorController) {
+    public ElevatorControllerInterface(int floor) {
         this.floor = floor;
-        this.elevatorController = elevatorController;
     }
 
     public void requestElevator() {
-        elevatorController.registerRequest(floor);
+        ElevatorController.getInstance().registerRequest(floor);
     }
 }

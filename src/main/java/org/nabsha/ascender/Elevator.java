@@ -11,8 +11,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Nabeel Shaheen on 1/08/2015.
  */
 public class Elevator implements Runnable {
-    private static final int MAX_NUMBER_OF_PERSONS_IN_ELEVATOR = 20;
-    private static final int MAX_ELEVATOR_CAPACITY = 20;
+    public static final int MAX_ELEVATOR_CAPACITY = 20;
     private static Logger LOG = LoggerFactory.getLogger(Elevator.class);
     private final ElevatorModel elevatorModel = new ElevatorModel();
     private boolean running = true;
@@ -29,7 +28,7 @@ public class Elevator implements Runnable {
         this.maxLevel = maxLevel;
         this.elevatorModel.setCurrentLevel(this.minLevel);
         this.elevatorModel.setNextStopSet(new TreeSet<Integer>());
-        this.elevatorModel.setPersons(new ArrayList<Person>(MAX_NUMBER_OF_PERSONS_IN_ELEVATOR));
+        this.elevatorModel.setPersons(new ArrayList<Person>(MAX_ELEVATOR_CAPACITY));
     }
 
     public void addOrder(Integer level) {
@@ -157,24 +156,19 @@ public class Elevator implements Runnable {
     private void checkIncomingOrder() {
         Integer order = null;
         if (this.elevatorModel.getNextStopSet().isEmpty()) {
-            while (this.isRunning()) {
-
-                try {
-                    order = this.incomingOrderList.poll(1000, TimeUnit.MILLISECONDS);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException();
-                }
-                if (order != null) {
-                    addOrder(order);
-                    break;
-                }
+            try {
+                order = this.incomingOrderList.poll(1000, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                throw new RuntimeException();
+            }
+            if (order != null) {
+                addOrder(order);
             }
         } else {
             while ((order = this.incomingOrderList.poll()) != null) {
                 addOrder(order);
             }
         }
-
     }
 
     private Direction calculateDirection(int sourceLevel, int destinationLevel) {

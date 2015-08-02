@@ -24,6 +24,10 @@ public class ElevatorController {
         return elevatorController;
     }
 
+    public List<Thread> getElevatorThreads() {
+        return elevatorThreads;
+    }
+
     public List<Elevator> getElevatorList() {
         return elevatorList;
     }
@@ -40,7 +44,7 @@ public class ElevatorController {
         this.elevatorControllerInterfaceList = elevatorControllerInterfaceList;
     }
 
-    private void startElevators() {
+    public void startElevators() {
         for (Elevator elevator : elevatorList) {
             Thread t = new Thread(elevator);
             elevatorThreads.add(t);
@@ -69,6 +73,7 @@ public class ElevatorController {
             if (elevationScore < 0) {
                 elevationScore = -elevationScore * 2;
             }
+
             if (minScor > elevationScore) {
                 minScor = elevationScore;
                 selectedElevator = elevator;
