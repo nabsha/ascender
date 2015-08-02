@@ -73,15 +73,19 @@ public class ElevatorTest {
 
         Elevator e = new Elevator("E1", 1, 10);
         e.setRunning(true);
-        for (int i = 10; i > 1; i--)
-            e.addOrder(i);
+        //for (int i = 10; i > 1; i--)
+            e.addOrder(3);
 
-        Floor.getInstance().addPersonOnFloor(3, 10, 7);
+        Floor.getInstance().addPersonOnFloor(3, 10, 4);
         Floor.getInstance().addPersonOnFloor(4, 10, 7);
-        Floor.getInstance().addPersonOnFloor(5, 20, 7);
+        Floor.getInstance().addPersonOnFloor(7, 20, 9);
         Thread t = runElevatorTest(e);
 
         t.join();
+
+        assertEquals(0, Floor.getInstance().getCountOfPeopleWaitingOnFloor(3));
+        assertEquals(0, Floor.getInstance().getCountOfPeopleWaitingOnFloor(4));
+        assertEquals(0, Floor.getInstance().getCountOfPeopleWaitingOnFloor(7));
 
     }
 }

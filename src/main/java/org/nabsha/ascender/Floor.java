@@ -24,15 +24,15 @@ public class Floor {
         countOfPeopleDelivered.put(floor, countOfPeopleDelivered.get(floor) + count);
     }
 
-    public void setCountOfPeopleDelivered(Map<Integer, Integer> countOfPeopleDelivered) {
-        this.countOfPeopleDelivered = countOfPeopleDelivered;
-    }
-
     public static Floor getInstance() {
         if (floor == null) {
             floor = new Floor();
         }
         return floor;
+    }
+
+    public int getCountOfPeopleWaitingOnFloor(Integer floor) {
+        return floorInfo.get(floor).size();
     }
 
     public List<Person> takePeopleFromFloor(int floor, int personCount) {

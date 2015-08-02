@@ -15,13 +15,9 @@ public class Elevator implements Runnable {
 
     private static final int MAX_NUMBER_OF_PERSONS_IN_ELEVATOR = 20;
 
-    private static final long TIME_TO_MOVE_BETWEEN_LEVELS = 1000;
-
     private boolean running = true;
 
     private static final int MAX_ELEVATOR_CAPACITY = 20;
-
-    private static final int MAX_ELEVATOR_LEVELS = 10;
 
     private String elevatorId;
 
@@ -96,7 +92,13 @@ public class Elevator implements Runnable {
     }
 
     private void loadPeople() {
-        persons.addAll(Floor.getInstance().takePeopleFromFloor(currentLevel, MAX_ELEVATOR_CAPACITY - persons.size()));
+        List<Person> personFromFloor = Floor.getInstance().takePeopleFromFloor(currentLevel, MAX_ELEVATOR_CAPACITY - persons.size());
+        persons.addAll(personFromFloor);
+        for (Person p : personFromFloor) {
+            if (!nextStopSet.contains(p.getDestinationLevel())) {
+                addOrder(p.getDestinationLevel());
+            }
+        }
     }
 
 
@@ -113,10 +115,6 @@ public class Elevator implements Runnable {
         }
         persons.removeAll(removablePersons);
 
-    }
-
-    public void addStop(Integer stop) {
-        this.nextStopSet.add(stop);
     }
 
     private void movingToNextLevel() {
@@ -182,7 +180,7 @@ public class Elevator implements Runnable {
                     throw new RuntimeException();
                 }
                 if (order != null) {
-                    addStop(order);
+                    addOrder(order);
                     break;
                 }
             }
