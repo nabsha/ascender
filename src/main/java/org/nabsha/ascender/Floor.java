@@ -6,11 +6,18 @@ import java.util.*;
  * Created by Nabeel Shaheen on 2/08/2015.
  */
 public class Floor {
+    private static Floor floor = null;
     private Map<Integer, LinkedList<Person>> floorInfo = new HashMap<Integer, LinkedList<Person>>();
     private Map<Integer, Integer> countOfPeopleDelivered = new HashMap<Integer, Integer>();
-    private static Floor floor = null;
 
     private Floor() {
+    }
+
+    public static Floor getInstance() {
+        if (floor == null) {
+            floor = new Floor();
+        }
+        return floor;
     }
 
     public Map<Integer, Integer> getCountOfPeopleDelivered() {
@@ -22,13 +29,6 @@ public class Floor {
             countOfPeopleDelivered.put(floor, 0);
         }
         countOfPeopleDelivered.put(floor, countOfPeopleDelivered.get(floor) + count);
-    }
-
-    public static Floor getInstance() {
-        if (floor == null) {
-            floor = new Floor();
-        }
-        return floor;
     }
 
     public int getCountOfPeopleWaitingOnFloor(Integer floor) {

@@ -11,56 +11,41 @@ import java.util.concurrent.TimeUnit;
  * Created by Nabeel Shaheen on 1/08/2015.
  */
 public class Elevator implements Runnable {
-    private static Logger LOG = LoggerFactory.getLogger(Elevator.class);
-
     private static final int MAX_NUMBER_OF_PERSONS_IN_ELEVATOR = 20;
-
-    private boolean running = true;
-
     private static final int MAX_ELEVATOR_CAPACITY = 20;
-
-    private String elevatorId;
-
-    private Direction direction;
-
-    private int currentLevel;
-
+    private static Logger LOG = LoggerFactory.getLogger(Elevator.class);
+    private final ElevatorModel elevatorModel = new ElevatorModel();
+    private boolean running = true;
     private int minLevel;
 
     private int maxLevel;
 
-    private List<Person> persons;
-
-    private Integer nextStop;
-
-    private TreeSet<Integer> nextStopSet;
-
     private LinkedBlockingQueue<Integer> incomingOrderList = new LinkedBlockingQueue<Integer>();
 
     public Elevator(String elevatorId, int minLevel, int maxLevel) {
-        this.elevatorId = elevatorId;
-        this.direction = Direction.STATIONARY;
+        this.elevatorModel.setElevatorId(elevatorId);
+        this.elevatorModel.setDirection(Direction.STATIONARY);
         this.minLevel = minLevel;
         this.maxLevel = maxLevel;
-        this.currentLevel = this.minLevel;
-        this.nextStopSet = new TreeSet<Integer>();
-        this.persons = new ArrayList<Person>(MAX_NUMBER_OF_PERSONS_IN_ELEVATOR);
+        this.elevatorModel.setCurrentLevel(this.minLevel);
+        this.elevatorModel.setNextStopSet(new TreeSet<Integer>());
+        this.elevatorModel.setPersons(new ArrayList<Person>(MAX_NUMBER_OF_PERSONS_IN_ELEVATOR));
     }
 
     public void addOrder(Integer level) {
-        nextStopSet.add(level);
+        elevatorModel.getNextStopSet().add(level);
     }
 
     @Override
     public String toString() {
         return "Elevator{" +
                 "running=" + running +
-                ", elevatorId='" + elevatorId + '\'' +
-                ", direction=" + direction +
-                ", currentLevel=" + currentLevel +
-                ", personsCount=" + persons.size() +
-                ", nextStop=" + nextStop +
-                ", nextStopSet=" + nextStopSet +
+                ", elevatorId='" + elevatorModel.getElevatorId() + '\'' +
+                ", direction=" + elevatorModel.getDirection() +
+                ", currentLevel=" + elevatorModel.getCurrentLevel() +
+                ", personsCount=" + elevatorModel.getPersons().size() +
+                ", nextStop=" + elevatorModel.getNextStop() +
+                ", nextStopSet=" + elevatorModel.getNextStopSet() +
                 ", incomingOrderList=" + incomingOrderList +
                 '}';
     }
@@ -69,33 +54,33 @@ public class Elevator implements Runnable {
         while (this.isRunning()) {
             do {
                 checkIncomingOrder();
-                this.nextStop = checkNextStop(this.currentLevel, this.direction);
+                this.elevatorModel.setNextStop(checkNextStop(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getDirection()));
                 System.out.println(this);
 
-                this.direction = calculateDirection(this.currentLevel, this.nextStop);
+                this.elevatorModel.setDirection(calculateDirection(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getNextStop()));
 
                 movingToNextLevel();
-                this.currentLevel += this.direction.step;
-            } while (this.nextStop != this.currentLevel);
+                this.elevatorModel.setCurrentLevel(this.elevatorModel.getCurrentLevel() + this.elevatorModel.getDirection().step);
+            } while (this.elevatorModel.getNextStop() != this.elevatorModel.getCurrentLevel());
 
             unloadPeople();
 
             loadPeople();
 
-            this.nextStopSet.remove(this.currentLevel);
-            if (this.nextStopSet.isEmpty()) {
-                this.direction = Direction.STATIONARY;
-                this.nextStop = -1;
+            this.elevatorModel.getNextStopSet().remove(this.elevatorModel.getCurrentLevel());
+            if (this.elevatorModel.getNextStopSet().isEmpty()) {
+                this.elevatorModel.setDirection(Direction.STATIONARY);
+                this.elevatorModel.setNextStop(-1);
             }
             System.out.println(this);
         }
     }
 
     private void loadPeople() {
-        List<Person> personFromFloor = Floor.getInstance().takePeopleFromFloor(currentLevel, MAX_ELEVATOR_CAPACITY - persons.size());
-        persons.addAll(personFromFloor);
+        List<Person> personFromFloor = Floor.getInstance().takePeopleFromFloor(elevatorModel.getCurrentLevel(), MAX_ELEVATOR_CAPACITY - elevatorModel.getPersons().size());
+        elevatorModel.getPersons().addAll(personFromFloor);
         for (Person p : personFromFloor) {
-            if (!nextStopSet.contains(p.getDestinationLevel())) {
+            if (!elevatorModel.getNextStopSet().contains(p.getDestinationLevel())) {
                 addOrder(p.getDestinationLevel());
             }
         }
@@ -107,13 +92,13 @@ public class Elevator implements Runnable {
             return;
 
         List<Person> removablePersons = new ArrayList<Person>();
-        for (Person person : persons) {
-            if (person.getDestinationLevel() == this.currentLevel) {
+        for (Person person : elevatorModel.getPersons()) {
+            if (person.getDestinationLevel() == this.elevatorModel.getCurrentLevel()) {
                 removablePersons.add(person);
-                Floor.getInstance().incrementCountOfPeopleDelivered(currentLevel, 1);
+                Floor.getInstance().incrementCountOfPeopleDelivered(elevatorModel.getCurrentLevel(), 1);
             }
         }
-        persons.removeAll(removablePersons);
+        elevatorModel.getPersons().removeAll(removablePersons);
 
     }
 
@@ -130,23 +115,23 @@ public class Elevator implements Runnable {
         Integer nextStop = -1;
         switch (currDirection) {
             case UPWARDS: {
-                stopList = nextStopSet.tailSet(currentLevel);
+                stopList = elevatorModel.getNextStopSet().tailSet(currentLevel);
                 if (!stopList.isEmpty())
                     nextStop = stopList.first();
                 else
-                    nextStop = nextStopSet.first();
+                    nextStop = elevatorModel.getNextStopSet().first();
                 break;
             }
             case DOWNWARDS: {
-                stopList = nextStopSet.headSet(currentLevel);
+                stopList = elevatorModel.getNextStopSet().headSet(currentLevel);
                 if (!stopList.isEmpty())
                     nextStop = stopList.last();
                 else
-                    nextStop = nextStopSet.last();
+                    nextStop = elevatorModel.getNextStopSet().last();
                 break;
             }
             default:
-                stopList = nextStopSet;
+                stopList = elevatorModel.getNextStopSet();
                 nextStop = findNearestLevel(stopList, currentLevel);
         }
         return nextStop;
@@ -171,7 +156,7 @@ public class Elevator implements Runnable {
 
     private void checkIncomingOrder() {
         Integer order = null;
-        if (this.nextStopSet.isEmpty()) {
+        if (this.elevatorModel.getNextStopSet().isEmpty()) {
             while (this.isRunning()) {
 
                 try {
@@ -211,51 +196,51 @@ public class Elevator implements Runnable {
     }
 
     public String getElevatorId() {
-        return elevatorId;
+        return elevatorModel.getElevatorId();
     }
 
     public void setElevatorId(String elevatorId) {
-        this.elevatorId = elevatorId;
+        this.elevatorModel.setElevatorId(elevatorId);
     }
 
     public Direction getDirection() {
-        return direction;
+        return elevatorModel.getDirection();
     }
 
     public void setDirection(Direction direction) {
-        this.direction = direction;
+        this.elevatorModel.setDirection(direction);
     }
 
     public int getCurrentLevel() {
-        return currentLevel;
+        return elevatorModel.getCurrentLevel();
     }
 
     public void setCurrentLevel(int currentLevel) {
-        this.currentLevel = currentLevel;
+        this.elevatorModel.setCurrentLevel(currentLevel);
     }
 
     public List<Person> getPersons() {
-        return persons;
+        return elevatorModel.getPersons();
     }
 
     public void setPersons(List<Person> persons) {
-        this.persons = persons;
+        this.elevatorModel.setPersons(persons);
     }
 
     public Integer getNextStop() {
-        return nextStop;
+        return elevatorModel.getNextStop();
     }
 
     public void setNextStop(Integer nextStop) {
-        this.nextStop = nextStop;
+        this.elevatorModel.setNextStop(nextStop);
     }
 
     public TreeSet<Integer> getNextStopSet() {
-        return nextStopSet;
+        return elevatorModel.getNextStopSet();
     }
 
     public void setNextStopSet(TreeSet<Integer> nextStopSet) {
-        this.nextStopSet = nextStopSet;
+        this.elevatorModel.setNextStopSet(nextStopSet);
     }
 
     public LinkedBlockingQueue<Integer> getIncomingOrderList() {
