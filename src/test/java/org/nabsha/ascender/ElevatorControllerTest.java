@@ -12,6 +12,9 @@ import static org.junit.Assert.*;
  */
 public class ElevatorControllerTest {
 
+    /**
+     * Test elevator selection.
+     */
     @Test
     public void testElevatorSelection() {
         Elevator e1 = createElevator("E1", 7, Direction.DOWNWARDS);

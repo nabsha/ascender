@@ -4,10 +4,33 @@ package org.nabsha.ascender;
  * Created by Nabeel Shaheen on 1/08/2015.
  */
 public enum Direction {
-    UPWARDS("^", 1), DOWNWARDS("\\/", -1), STATIONARY("-",0);
+    /**
+     * The UPWARDS.
+     */
+    UPWARDS("^", 1), /**
+     * The DOWNWARDS.
+     */
+    DOWNWARDS("\\/", -1), /**
+     * The STATIONARY.
+     */
+    STATIONARY("-",0);
 
+    /**
+     * The Alias.
+     */
     String alias;
+
+    /**
+     * The Step.
+     */
     int step;
+
+    /**
+     * Instantiates a new Direction.
+     *
+     * @param alias the alias
+     * @param step the step
+     */
     Direction(String alias, int step) {
         this.alias = alias;
         this.step = step;

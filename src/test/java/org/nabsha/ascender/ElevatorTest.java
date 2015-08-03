@@ -9,6 +9,11 @@ import static org.junit.Assert.*;
  */
 public class ElevatorTest {
 
+    /**
+     * Test elevator order handling going down.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
     public void testElevatorOrderHandlingGoingDown() throws InterruptedException {
         Elevator e = new Elevator("E1", 1, 10);
@@ -47,6 +52,11 @@ public class ElevatorTest {
         return t;
     }
 
+    /**
+     * Test elevator order handling going up.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
     public void testElevatorOrderHandlingGoingUp() throws InterruptedException {
         Elevator e = new Elevator("E1", 1, 10);
@@ -68,6 +78,11 @@ public class ElevatorTest {
         assertEquals(Direction.STATIONARY, e.getDirection());
     }
 
+    /**
+     * Test elevator capacity.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
     public void testElevatorCapacity() throws InterruptedException {
 

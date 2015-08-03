@@ -77,8 +77,6 @@ Elevator "1" o- "20" Person
 Floor "1" o- "*" Person
 
 interface Runnable
-Runnable -|> Elevator
-Runnable -|> ElevatorController
-
+Elevator -|> Runnable
 
 @enduml

@@ -5,13 +5,13 @@ package org.nabsha.ascender;
  */
 public class ElevatorControllerInterface {
 
-    private final int floor;
+    /**
+     * Request elevator.
+     *
+     * @param floor the floor
+     */
+    public static void requestElevator(int floor) {
 
-    public ElevatorControllerInterface(int floor) {
-        this.floor = floor;
-    }
-
-    public void requestElevator() {
         ElevatorController.getInstance().registerRequest(floor);
     }
 }

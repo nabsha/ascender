@@ -12,11 +12,13 @@ import static org.junit.Assert.*;
  */
 public class ElevatorControllerInterfaceTest {
 
+    /**
+     * Test request elevator test.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
     public void testRequestElevatorTest() throws InterruptedException {
-        ElevatorControllerInterface eci1 = new ElevatorControllerInterface(1);
-        ElevatorControllerInterface eci2 = new ElevatorControllerInterface(2);
-        ElevatorControllerInterface eci3 = new ElevatorControllerInterface(3);
 
         List<Elevator> elevators = new ArrayList<Elevator>();
         Elevator e1 = createElevator("E1", 0, Direction.STATIONARY);
@@ -34,15 +36,15 @@ public class ElevatorControllerInterfaceTest {
         controller.startElevators();
 
         Floor.getInstance().addPersonOnFloor(1, 10, 7);
-        eci1.requestElevator();
+        ElevatorControllerInterface.requestElevator(1);
 
         Thread.sleep(2000);
         Floor.getInstance().addPersonOnFloor(2, 10, 8);
-        eci2.requestElevator();
+        ElevatorControllerInterface.requestElevator(2);
 
         Thread.sleep(2000);
         Floor.getInstance().addPersonOnFloor(3, 10, 10);
-        eci3.requestElevator();
+        ElevatorControllerInterface.requestElevator(3);
 
         for (Thread t : controller.getElevatorThreads()) {
             while (t.isAlive()) {
