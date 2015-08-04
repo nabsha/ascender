@@ -1,7 +1,56 @@
-Introdution
-===========
+# Introdution
 
-An elevator system
+This is a very basic implementation of an elevator system.
+
+# Installation
+
+1. Get latest copy of the code using `git clone https://github.com/nabsha/ascender.git`
+2. Compile it using `cd ascender && mvn clean install` 
+3. Run it using `mvn exec:java`
+
+# Usage
+
+Once the application is running it will exposes following REST endpoints to interact with the elevator system
+
+* [GET /api/floors](http://localhost:4567/api/floors) :
+This api returns the Persons waiting on each floor and count of Persons delivered to each floor
+
+* [GET /api/elevators](http://localhost:4567/api/elevators) : 
+This api returns model of all elevators in the system
+
+* [POST /api/addPeopleOnFloor](http://localhost:4567/api/addPeopleOnFloor) : 
+This api adds people on a the given floor using POST method. It expects three fields in the form which are floorNumber, peopleCount and destinationFloor
+The form must be x-www-form-urlencoded
+
+* [GET /api/requestElevator/[floorNumber]](http://localhost:4567/api/requestElevator/1) : 
+This api submits a request to ElevatorController to use the elevator. The ElevatorController in turn selects an appropriate Elevator and add an Order in Elevator order list
+The floorNumber must be replaced with the source floor creating the request.
+* [GET /api/events](http://localhost:4567/api/events) :
+This api prints all the tracked movement of the Elevator
+
+# How it works
+A simple scenario is that people come to a floor(addPeopleOnFloor) and request elevator for the destination floor(requestElevator). 
+Once Elevator stops at a floor, people get off the elevator first, then people waiting on this floor get on the elevator and Order for new floor and this goes on.
+## Elevator Scheduling and Next Stop Algorithm
+In this implementation there are two algorithms running in conjunction. 
+
+1. ElevatorController is higher level scheduler that distributes the incoming requests among Elevators. 
+This is based on scoring algorithm that calculates score for each Elevator based on a formula (ElevatorController.selectElevator()) and the Elevator with lowest score is selected.
+
+2. Once Elevator recieves an Order, it keeps its own sorted set of next destination to visit and selects the first Order in a specified Direction(Elevator.checkNextStop()). 
+i.e. an elevator going up will prioritize Orders in upward direction and vice versa.
+
+# Technologies
+Following technologies are used in this project
+
+* Java 8
+* Spark Java
+* Hibernate
+* HSQLDB
+* Maven
+
+
+
 
 # Original Requirements
 

@@ -101,29 +101,34 @@ public class Elevator implements Runnable {
     public void run() {
 
         while (this.isRunning()) {
-            if (this.elevatorModel.getNextStopSet().isEmpty()) {
-                waitForOrders(100);
-                continue;
-            }
-            do {
-                this.elevatorModel.setNextStop(checkNextStop(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getDirection()));
-                LOG.debug(this.toString());
-                this.elevatorModel.setDirection(calculateDirection(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getNextStop()));
-
-                movingToNextLevel();
-                this.elevatorModel.setCurrentLevel(this.elevatorModel.getCurrentLevel() + this.elevatorModel.getDirection().step);
-                ElevatorRecorder.save(this.elevatorModel);
-            } while (this.elevatorModel.getNextStop() != this.elevatorModel.getCurrentLevel());
-
-            unloadPeople();
-
-            loadPeople();
-
-            removeVisitedStop();
+            processOrder();
         }
 
         //stopping request handler thread
         elevatorRequestHandler.setRunning(false);
+    }
+
+    public void processOrder() {
+
+        if (this.elevatorModel.getNextStopSet().isEmpty()) {
+            waitForOrders(100);
+            return;
+        }
+        do {
+            this.elevatorModel.setNextStop(checkNextStop(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getDirection()));
+            LOG.debug(this.toString());
+            this.elevatorModel.setDirection(calculateDirection(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getNextStop()));
+
+            movingToNextLevel();
+            this.elevatorModel.setCurrentLevel(this.elevatorModel.getCurrentLevel() + this.elevatorModel.getDirection().step);
+            ElevatorRecorder.save(this.elevatorModel);
+        } while (this.elevatorModel.getNextStop() != this.elevatorModel.getCurrentLevel());
+
+        unloadPeople();
+
+        loadPeople();
+
+        removeVisitedStop();
     }
 
     private void removeVisitedStop() {

@@ -24,7 +24,7 @@ public class ElevatorAPI {
      */
     public static void createRESTHandler() {
 
-        get("/view/elevators", (req, res) -> {
+        get("/api/elevators", (req, res) -> {
             CopyOnWriteArrayList<ElevatorModel> models = new CopyOnWriteArrayList<ElevatorModel>();
             for (Elevator e : ElevatorController.getInstance().getElevatorList()) {
                 models.add(e.getElevatorModel());
@@ -32,17 +32,17 @@ public class ElevatorAPI {
             return models;
         }, new JsonTransformer());
 
-        get("/view/floors", (req, res) -> {
+        get("/api/floors", (req, res) -> {
             return Floor.getInstance();
         }, new JsonTransformer());
 
-        get("/view/requestElevator/:floor", (req, res) -> {
+        get("/api/requestElevator/:floor", (req, res) -> {
             String floor = req.params(":floor");
             ElevatorControllerInterface.requestElevator(Integer.valueOf(floor));
             return "Elevator request submitted";
         });
 
-        post("/view/addPeopleOnFloor", (req, res) -> {
+        post("/api/addPeopleOnFloor", (req, res) -> {
             Map<String, String> keyValueMap = keyValues(req.body());
             String floorNumber = keyValueMap.get("floorNumber");
             String peopleCount = keyValueMap.get("peopleCount");
@@ -56,7 +56,7 @@ public class ElevatorAPI {
             return Floor.getInstance().getCountOfPeopleWaitingOnFloor(Integer.valueOf(floorNumber));
         }, new JsonTransformer());
 
-        get("/view/events", (req, res) -> {
+        get("/api/events", (req, res) -> {
             return ElevatorRecorder.getAll();
         }, new JsonTransformer());
     }

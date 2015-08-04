@@ -34,6 +34,11 @@ public class Floor {
         return floor;
     }
 
+    public static void resetFloor() {
+
+        Floor.floor = null;
+    }
+
     /**
      * Gets count of people delivered.
      *

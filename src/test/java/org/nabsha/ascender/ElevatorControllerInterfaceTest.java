@@ -49,13 +49,9 @@ public class ElevatorControllerInterfaceTest {
         Floor.getInstance().addPersonOnFloor(3, 10, 10);
         ElevatorControllerInterface.requestElevator(3);
 
-        for (Thread t : controller.getElevatorThreads()) {
-            while (t.isAlive()) {
-                t.join(1000);
-                System.out.println(controller.getElevatorList());
-                System.out.println(Floor.getInstance().getCountOfPeopleDelivered());
-            }
-        }
+        Thread.sleep(10000);
+        System.out.println(controller.getElevatorList());
+        controller.shutDownElevators();
     }
 
     private Elevator createElevator(String elevatorId, int currentLevel, Direction direction) {

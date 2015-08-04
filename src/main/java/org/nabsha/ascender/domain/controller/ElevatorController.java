@@ -126,4 +126,11 @@ public class ElevatorController {
 
         return selectedElevator;
     }
+
+    public void shutDownElevators() {
+
+        for (Elevator e : elevatorList) {
+            e.setRunning(false);
+        }
+    }
 }

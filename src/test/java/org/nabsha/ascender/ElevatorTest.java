@@ -20,16 +20,13 @@ public class ElevatorTest {
      */
     @Test
     public void testElevatorOrderHandlingGoingDown() throws InterruptedException {
+
         Elevator e = new Elevator("E1", 1, 10);
         e.setRunning(true);
         e.setCurrentLevel(10);
-        for (int i = 1; i < 10; i++)
-            e.addOrder(i);
+        e.addOrder(1);
 
-
-        Thread t = runElevatorTest(e);
-
-        t.join();
+        runElevatorTest(e, 11);
 
         assertEquals(1, e.getCurrentLevel());
 
@@ -42,18 +39,12 @@ public class ElevatorTest {
 
     }
 
-    private Thread runElevatorTest(Elevator e) throws InterruptedException {
-        Thread t = new Thread(e);
-        t.start();
+    private void runElevatorTest(Elevator e, int loopCount) throws InterruptedException {
 
-
-        Thread.sleep(2000);
-        while (!e.getDirection().equals(Direction.STATIONARY)) {
-            System.out.println(Floor.getInstance());
-            Thread.sleep(1000);
+        for (int i = 0; i < loopCount; i++) {
+            e.processOrder();
+            System.out.println(e);
         }
-        e.setRunning(false);
-        return t;
     }
 
     /**
@@ -63,15 +54,14 @@ public class ElevatorTest {
      */
     @Test
     public void testElevatorOrderHandlingGoingUp() throws InterruptedException {
+
         Elevator e = new Elevator("E1", 1, 10);
         e.setRunning(true);
         for (int i = 10; i > 1; i--)
             e.addOrder(i);
 
 
-        Thread t = runElevatorTest(e);
-
-        t.join();
+        runElevatorTest(e, 10);
 
         assertEquals(10, e.getCurrentLevel());
 
@@ -90,18 +80,17 @@ public class ElevatorTest {
     @Test
     public void testElevatorCapacity() throws InterruptedException {
 
+        Floor.resetFloor();
         Elevator e = new Elevator("E1", 1, 10);
         e.setRunning(true);
         //for (int i = 10; i > 1; i--)
-            e.addOrder(3);
+        e.addOrder(3);
 
         Floor.getInstance().addPersonOnFloor(3, 10, 4);
         Floor.getInstance().addPersonOnFloor(4, 10, 7);
         Floor.getInstance().addPersonOnFloor(7, 20, 9);
-        Thread t = runElevatorTest(e);
-
-        t.join();
-
+        runElevatorTest(e, 10);
+        System.out.println(Floor.getInstance());
         assertEquals(0, Floor.getInstance().getCountOfPeopleWaitingOnFloor(3));
         assertEquals(0, Floor.getInstance().getCountOfPeopleWaitingOnFloor(4));
         assertEquals(0, Floor.getInstance().getCountOfPeopleWaitingOnFloor(7));
