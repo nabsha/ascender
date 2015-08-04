@@ -4,17 +4,17 @@ package "Elevator System" {
 [Elevator Controller Interface] as ECC
 [Elevator Controller] as EC
 [Elevator] as E
-
+[ElevatorRecorder] as ER
+E -left- ER
 ECC "10" *-- "1" EC : requests
 EC "1" --* "4" E : controls
+[Floor] as Floor
 }
+E -- getElevatorsDetail
 requestElevator -- ECC
-
-[Elevator Controller View] as ECV
-EC -left- ECV
-
-[Elevator Controller Model] as ECM
-EC -right- ECM
+getElevatorEvents -left- ER
+Floor -up- addPersonOnFloor
+Floor -up- getFloorDetails
 
 
 note bottom of E
@@ -25,9 +25,9 @@ note bottom of E
 end note
 
 note top of EC
-  - Brain of the system
   - Captures orders from clients
-  and delegates to suitable elevator
+  - Schedule order to elevator based
+  on its direction and level
 end note
 
 note top of ECC

@@ -1,9 +1,14 @@
-package org.nabsha.ascender;
+package org.nabsha.ascender.domain.elevator;
 
+import org.nabsha.ascender.domain.actors.Floor;
+import org.nabsha.ascender.domain.actors.Person;
+import org.nabsha.ascender.persistence.ElevatorRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -11,9 +16,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Elevator implements Runnable {
 
-    /**
-     * The constant MAX_ELEVATOR_CAPACITY.
-     */
     public static final int MAX_ELEVATOR_CAPACITY = 20;
 
     private static Logger LOG = LoggerFactory.getLogger(Elevator.class);
@@ -34,8 +36,8 @@ public class Elevator implements Runnable {
      * Instantiates a new Elevator.
      *
      * @param elevatorId the elevator id
-     * @param minLevel the min level
-     * @param maxLevel the max level
+     * @param minLevel   the min level
+     * @param maxLevel   the max level
      */
     public Elevator(String elevatorId, int minLevel, int maxLevel) {
 
@@ -103,17 +105,16 @@ public class Elevator implements Runnable {
                 waitForOrders(100);
                 continue;
             }
+            do {
+                this.elevatorModel.setNextStop(checkNextStop(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getDirection()));
+                LOG.debug(this.toString());
+                this.elevatorModel.setDirection(calculateDirection(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getNextStop()));
 
-            synchronized (elevatorModel) {
-                while (this.elevatorModel.getNextStop() != this.elevatorModel.getCurrentLevel()) {
-                    this.elevatorModel.setNextStop(checkNextStop(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getDirection()));
-                    System.out.println(this);
-                    this.elevatorModel.setDirection(calculateDirection(this.elevatorModel.getCurrentLevel(), this.elevatorModel.getNextStop()));
+                movingToNextLevel();
+                this.elevatorModel.setCurrentLevel(this.elevatorModel.getCurrentLevel() + this.elevatorModel.getDirection().step);
+                ElevatorRecorder.save(this.elevatorModel);
+            } while (this.elevatorModel.getNextStop() != this.elevatorModel.getCurrentLevel());
 
-                    movingToNextLevel();
-                    this.elevatorModel.setCurrentLevel(this.elevatorModel.getCurrentLevel() + this.elevatorModel.getDirection().step);
-                }
-            }
             unloadPeople();
 
             loadPeople();

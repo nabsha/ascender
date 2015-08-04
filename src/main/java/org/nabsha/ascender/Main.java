@@ -1,11 +1,9 @@
-package org.nabsha.ascender.api;
+package org.nabsha.ascender;
 
-import org.nabsha.ascender.Elevator;
-import org.nabsha.ascender.ElevatorController;
-import org.nabsha.ascender.ElevatorControllerInterface;
+import org.nabsha.ascender.domain.controller.ElevatorController;
+import org.nabsha.ascender.domain.elevator.Elevator;
+import org.nabsha.ascender.view.ElevatorAPI;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -14,14 +12,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Main {
 
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     * @throws SQLException the sQL exception
-     * @throws ClassNotFoundException the class not found exception
-     */
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) {
+
+        createEverything();
+
+        ElevatorAPI.createRESTHandler();
+    }
+
+    private static void createEverything() {
 
         List<Elevator> elevators = new CopyOnWriteArrayList<Elevator>();
         Elevator e1 = new Elevator("Elevator 1", 1, 10);
@@ -37,7 +35,5 @@ public class Main {
         ElevatorController controller = ElevatorController.getInstance();
         controller.setElevatorList(elevators);
         controller.startElevators();
-
-        ElevatorAPI.apiHandlers();
     }
 }

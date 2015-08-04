@@ -1,9 +1,9 @@
-package org.nabsha.ascender;
+package org.nabsha.ascender.domain.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.nabsha.ascender.domain.elevator.Direction;
+import org.nabsha.ascender.domain.elevator.Elevator;
+
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**

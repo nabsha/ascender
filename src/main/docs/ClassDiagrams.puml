@@ -61,13 +61,6 @@ class ElevatorRecorder {
 
 ElevatorRecorder "1" -* "4" Elevator
 
-class Order {
-  sourceLevel
-  destinationLevel
-}
-Elevator . Order
-ElevatorController . Order
-
 
 ElevatorController "1" - "4" Elevator
 ElevatorController "1" - "10" ElevatorControllerInterface

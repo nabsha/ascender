@@ -1,23 +1,58 @@
-package org.nabsha.ascender;
+package org.nabsha.ascender.domain.elevator;
 
+
+import org.nabsha.ascender.domain.actors.Person;
+
+import javax.persistence.*;
 import java.util.List;
 import java.util.TreeSet;
 
 /**
  * The type Elevator model.
  */
+@Entity
+@Table(name = "ELEVATOR_EVENTS")
 public class ElevatorModel {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "EVENT_ID")
+    private long uuid;
+
+    @Column(name = "ELEVATOR_ID")
     private String elevatorId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DIRECTION")
     private Direction direction;
+
+    @Column(name = "CURRENT_LEVEL")
     private int currentLevel;
+
+    @Transient
     private List<Person> persons;
+
+    @Column(name = "NEXT_STOP")
     private Integer nextStop = -1;
+
+    @Transient
     private TreeSet<Integer> nextStopSet;
 
     /**
      * Instantiates a new Elevator model.
      */
     public ElevatorModel() {
+
+    }
+
+    public long getUuid() {
+
+        return uuid;
+    }
+
+    public void setUuid(long uuid) {
+
+        this.uuid = uuid;
     }
 
     /**
@@ -26,6 +61,7 @@ public class ElevatorModel {
      * @return the elevator id
      */
     public String getElevatorId() {
+
         return elevatorId;
     }
 
@@ -35,6 +71,7 @@ public class ElevatorModel {
      * @param elevatorId the elevator id
      */
     public void setElevatorId(String elevatorId) {
+
         this.elevatorId = elevatorId;
     }
 
@@ -43,7 +80,9 @@ public class ElevatorModel {
      *
      * @return the direction
      */
+
     public Direction getDirection() {
+
         return direction;
     }
 
@@ -53,6 +92,7 @@ public class ElevatorModel {
      * @param direction the direction
      */
     public void setDirection(Direction direction) {
+
         this.direction = direction;
     }
 
@@ -61,7 +101,9 @@ public class ElevatorModel {
      *
      * @return the current level
      */
+
     public int getCurrentLevel() {
+
         return currentLevel;
     }
 
@@ -71,6 +113,7 @@ public class ElevatorModel {
      * @param currentLevel the current level
      */
     public void setCurrentLevel(int currentLevel) {
+
         this.currentLevel = currentLevel;
     }
 
@@ -80,6 +123,7 @@ public class ElevatorModel {
      * @return the persons
      */
     public List<Person> getPersons() {
+
         return persons;
     }
 
@@ -89,6 +133,7 @@ public class ElevatorModel {
      * @param persons the persons
      */
     public void setPersons(List<Person> persons) {
+
         this.persons = persons;
     }
 
@@ -97,7 +142,9 @@ public class ElevatorModel {
      *
      * @return the next stop
      */
+
     public Integer getNextStop() {
+
         return nextStop;
     }
 
@@ -107,7 +154,13 @@ public class ElevatorModel {
      * @param nextStop the next stop
      */
     public void setNextStop(Integer nextStop) {
+
         this.nextStop = nextStop;
+    }
+
+    public String getNextStopSetString() {
+
+        return nextStopSet.toString();
     }
 
     /**
@@ -116,6 +169,7 @@ public class ElevatorModel {
      * @return the next stop set
      */
     public TreeSet<Integer> getNextStopSet() {
+
         return nextStopSet;
     }
 
@@ -125,6 +179,7 @@ public class ElevatorModel {
      * @param nextStopSet the next stop set
      */
     public void setNextStopSet(TreeSet<Integer> nextStopSet) {
+
         this.nextStopSet = nextStopSet;
     }
 

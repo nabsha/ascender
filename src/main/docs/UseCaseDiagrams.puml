@@ -22,7 +22,7 @@ rectangle Elevator {
   EC  - (Insert order) : add orders to elevator using
 }
 
-rectangle ElevatorFloorInterface {
+rectangle ElevatorControllerInterface {
   EC - (Get client installation level) : to identify which level request is coming from
   EC - (Get count of people waiting) : number of people waiting to use elevator
   EC - (Get destination level) : to identify which level people want to go to

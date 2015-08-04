@@ -1,8 +1,12 @@
 package org.nabsha.ascender;
 
 import org.junit.Test;
+import org.nabsha.ascender.domain.actors.Floor;
+import org.nabsha.ascender.domain.elevator.Direction;
+import org.nabsha.ascender.domain.elevator.Elevator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Nabeel Shaheen on 2/08/2015.

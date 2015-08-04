@@ -1,4 +1,4 @@
-package org.nabsha.ascender;
+package org.nabsha.ascender.domain.elevator;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;

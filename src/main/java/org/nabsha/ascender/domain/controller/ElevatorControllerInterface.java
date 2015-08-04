@@ -1,4 +1,4 @@
-package org.nabsha.ascender;
+package org.nabsha.ascender.domain.controller;
 
 /**
  * Created by Nabeel Shaheen on 2/08/2015.

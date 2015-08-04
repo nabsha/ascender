@@ -1,6 +1,9 @@
-package org.nabsha.ascender;
+package org.nabsha.ascender.domain.actors;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**

@@ -1,11 +1,14 @@
 package org.nabsha.ascender;
 
 import org.junit.Test;
+import org.nabsha.ascender.domain.controller.ElevatorController;
+import org.nabsha.ascender.domain.elevator.Direction;
+import org.nabsha.ascender.domain.elevator.Elevator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Nabeel Shaheen on 2/08/2015.

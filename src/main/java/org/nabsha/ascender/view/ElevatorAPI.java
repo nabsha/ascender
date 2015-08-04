@@ -1,13 +1,15 @@
-package org.nabsha.ascender.api;
+package org.nabsha.ascender.view;
 
-import org.nabsha.ascender.*;
+import org.nabsha.ascender.domain.actors.Floor;
+import org.nabsha.ascender.domain.controller.ElevatorController;
+import org.nabsha.ascender.domain.controller.ElevatorControllerInterface;
+import org.nabsha.ascender.domain.elevator.Elevator;
+import org.nabsha.ascender.domain.elevator.ElevatorModel;
+import org.nabsha.ascender.persistence.ElevatorRecorder;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -20,9 +22,9 @@ public class ElevatorAPI {
     /**
      * Rest Api handlers.
      */
-    public static void apiHandlers() {
+    public static void createRESTHandler() {
 
-        get("/api/elevators", (req, res) -> {
+        get("/view/elevators", (req, res) -> {
             CopyOnWriteArrayList<ElevatorModel> models = new CopyOnWriteArrayList<ElevatorModel>();
             for (Elevator e : ElevatorController.getInstance().getElevatorList()) {
                 models.add(e.getElevatorModel());
@@ -30,17 +32,17 @@ public class ElevatorAPI {
             return models;
         }, new JsonTransformer());
 
-        get("/api/floors", (req, res) -> {
+        get("/view/floors", (req, res) -> {
             return Floor.getInstance();
         }, new JsonTransformer());
 
-        get("/api/requestElevator/:floor", (req, res) -> {
+        get("/view/requestElevator/:floor", (req, res) -> {
             String floor = req.params(":floor");
             ElevatorControllerInterface.requestElevator(Integer.valueOf(floor));
             return "Elevator request submitted";
         });
 
-        post("/api/addPeopleOnFloor", (req, res) -> {
+        post("/view/addPeopleOnFloor", (req, res) -> {
             Map<String, String> keyValueMap = keyValues(req.body());
             String floorNumber = keyValueMap.get("floorNumber");
             String peopleCount = keyValueMap.get("peopleCount");
@@ -52,6 +54,10 @@ public class ElevatorAPI {
 
             Floor.getInstance().addPersonOnFloor(Integer.valueOf(floorNumber), Integer.valueOf(peopleCount), Integer.valueOf(destinationFloor));
             return Floor.getInstance().getCountOfPeopleWaitingOnFloor(Integer.valueOf(floorNumber));
+        }, new JsonTransformer());
+
+        get("/view/events", (req, res) -> {
+            return ElevatorRecorder.getAll();
         }, new JsonTransformer());
     }
 
